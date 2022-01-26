@@ -14515,7 +14515,30 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>[Work in Progress] Correlating Domestic Economic Measures and Suicide Rate: A Philippine Outlook</p>
+<p>[Work in Progress] Correlating Economic Indicators and Suicide Rate: A Philippine Outlook</p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Problem:
+Find an economic indicator with a positive correlation with suicide rate.
+Use said indicator to create a model for forecasting suicide rate.</p>
+<p>Limitation:
+Use data only between 2000-2018/2019
+-Philippine Suicide Rate earliest available data is from 2000
+-Excluded 2020 data because of COVID-19 pandemic which could have introduced one or more factors that severely aggravated the country's suicide rate. The identification of said factors are outside the scope of this meta-analysis.</p>
+<p>*Dataset obtained from World Bank Open Database</p>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Economic Indicators Looked At:</p>
+<p>Inflation Rate
+Gross Domestic Product (GDP) Growth
+Unemployment Rate
+Consumer Price Index</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14552,12 +14575,23 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">normalized</span>
     
 
+<span class="c1">#load dataset</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data_source/economic_measures_suicide_rate.csv&quot;</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">])</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
 
 <span class="n">cpi</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
 <span class="n">suicide_female</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
 <span class="n">suicide_male</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+
+<span class="c1">#check for correlation</span>
+<span class="c1"># x= [cpi.array]#.to_numpy().squeeze()</span>
+<span class="c1"># y=[suicide_female.array]#.to_numpy().squeeze()</span>
+<span class="c1"># z=suicide_male.to_numpy().squeeze()</span>
+<span class="c1"># #print(x)</span>
+<span class="c1"># print(&quot;Pearson&#39;s correlation: &quot;)</span>
+<span class="c1"># print(cpi.values)</span>
+<span class="c1"># #print(x.corr(z))</span>
 
 <span class="n">min_max</span><span class="o">=</span><span class="n">selectMinMax</span><span class="p">(</span><span class="n">cpi</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 <span class="n">normalized_cpi</span><span class="o">=</span><span class="n">normalize</span><span class="p">(</span><span class="n">min_max</span><span class="p">,</span><span class="n">cpi</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
@@ -14625,20 +14659,20 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Model Coefficients: [[0.42931994]]
-Mean Absolute Error: 0.10956368531575177
-Coefficient of Determination: 0.3907201305548772
+<pre>Model Coefficients: [[0.58491243]]
+Mean Absolute Error: 0.15962098269896827
+Coefficient of Determination: -8.005702738527914
 Linear Regression prediction: 
-[[0.23187688]
- [0.45531581]
- [0.55321449]
- [0.42866193]]
+[[0.3963861 ]
+ [0.25731243]
+ [0.77886908]
+ [0.72054118]]
 Actual Values:
       Female Suicide
-2000           0.250
-2009           0.750
-2013           0.625
-2008           0.375
+2007           0.375
+2003           0.375
+2018           0.500
+2017           0.500
 SVR prediction: 
 [0.51927428 0.61734575 0.50907663 0.74346634]
 Actual Values:
